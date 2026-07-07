@@ -1,0 +1,7 @@
+# Generated at runtime; the dir is kept via data/.gitkeep
+/data/tree.pl
+/data/tree.pl.tmp
+
+# Local Claude Code state (per-user; not shared)
+/.claude/settings.local.json
+/.claude/*.tmp.*
