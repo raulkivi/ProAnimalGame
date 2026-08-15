@@ -1,0 +1,16 @@
+name: test
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install GNU Prolog
+        run: sudo apt-get update && sudo apt-get install -y gprolog
+      - name: Run test suites
+        run: make test

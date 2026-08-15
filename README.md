@@ -1,5 +1,9 @@
 # Animal Game
 
+[![test](https://github.com/raulkivi/ProAnimalGame/actions/workflows/test.yml/badge.svg)](https://github.com/raulkivi/ProAnimalGame/actions/workflows/test.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![gprolog 1.5.0+](https://img.shields.io/badge/gprolog-1.5.0%2B-blue)](http://www.gprolog.org/)
+
 A classic "20 questions" style guessing game written in **GNU Prolog**. The
 computer tries to guess the animal you're thinking of by asking yes/no
 questions. When it guesses wrong, you teach it a new animal and a question that
@@ -29,10 +33,24 @@ Would you like to play again? (yes/no): no
 
 </details>
 
-This is a companion port of the [Forth implementation](../AnimalGame) of the
-same game — same design, re-expressed to play to Prolog's strengths (see
+This is a companion port of the
+[Forth implementation](https://github.com/raulkivi/AnimalGame) of the same
+game — same design, re-expressed to play to Prolog's strengths (see
 [*A bit about Prolog*](#a-bit-about-prolog) and
 [*Where Prolog changes the design*](#where-prolog-changes-the-design)).
+
+## Contents
+
+1. [A bit about Prolog](#a-bit-about-prolog)
+2. [Requirements](#requirements)
+3. [Running](#running)
+4. [How it works](#how-it-works)
+5. [Where Prolog changes the design](#where-prolog-changes-the-design)
+6. [Documentation](#documentation)
+7. [Tests](#tests)
+8. [For educators, students & Prolog enthusiasts](#for-educators-students--prolog-enthusiasts)
+9. [License](#license)
+10. [Sources & further reading](#sources--further-reading)
 
 ## A bit about Prolog
 
@@ -160,6 +178,57 @@ test_ui.pl: all tests passed (8 checks)
 test_tree.pl: all tests passed (6 checks)
 test_persist.pl: all tests passed (6 checks)
 ```
+
+## For educators, students & Prolog enthusiasts
+
+This project is small enough to read in one sitting but touches a real spread
+of Prolog and software-design ideas, which makes it a decent teaching
+artifact:
+
+- **Unification as data construction.** The knowledge base isn't built with
+  `assert`ed facts — it's a plain term (`animal/1` / `question/3`) grown and
+  rebuilt by unification. `src/tree.pl`'s `traverse/3` is a compact example of
+  "relate old state to new state" instead of mutating in place.
+- **Clause-head pattern matching as dispatch.** No `if is_leaf(X) then ... else
+  ...` anywhere — leaf vs. question is decided by which clause head unifies
+  (see `traverse/3` in [`src/tree.pl`](src/tree.pl)).
+- **Native read/write as a persistence layer.** [`src/persist.pl`](src/persist.pl)
+  has no hand-rolled serializer — `writeq`/`read` *are* the format, so the
+  save file and the in-memory term can never drift apart.
+- **TDD with zero mocking framework.** [`tests/scripted_io.pl`](tests/scripted_io.pl)
+  is a from-scratch test double for I/O, built entirely from the same
+  `multifile`/dynamic-backend mechanism the production code uses — a clean,
+  minimal illustration of dependency inversion in a language with no
+  interfaces or classes.
+- **A cross-paradigm comparison for free.** The
+  [companion Forth port](https://github.com/raulkivi/AnimalGame) implements
+  the *identical* spec — same tree, same learning rule, same test counts — so
+  diffing the two READMEs' [design-decisions tables](#where-prolog-changes-the-design)
+  is a ready-made "same problem, two paradigms" exercise.
+- **A full spec, not just code.** [`docs/AnimalGame.md`](docs/AnimalGame.md)
+  documents the data structure, game loop, learning algorithm, and
+  predicate-level API with Mermaid diagrams — usable as assigned reading or as
+  a template for how to *write* a design spec.
+
+**Ideas for assignments / extensions**, roughly easiest first:
+
+1. Port the game to SWI-Prolog and note every GNU-Prolog-specific workaround
+   you have to remove (`docs/AnimalGame.md`'s
+   [*Implementation notes*](docs/AnimalGame.md#implementation-notes-gnu-prolog-specifics)
+   lists them).
+2. Add a predicate that renders the current saved tree as a Mermaid
+   `flowchart` (the tree is already a Prolog term — this is a `read/1` plus a
+   recursive `format/2`).
+3. Replace the seed tree with one loaded from a CSV/JSON dataset of animals.
+4. Generalize `question/3` to an n-ary `question(Text, [Label-Child, ...])` so
+   the game can ask multiple-choice, not just yes/no, questions — a good
+   exercise in extending a closed data type without breaking existing tests.
+5. Add tree-balancing: when the same distinguishing question would be asked on
+   two different branches, merge them.
+
+## License
+
+[MIT](LICENSE)
 
 ## Sources & further reading
 
