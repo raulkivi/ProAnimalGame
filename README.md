@@ -6,15 +6,28 @@ questions. When it guesses wrong, you teach it a new animal and a question that
 tells the two apart — so the program gets smarter every time you play. The
 learned decision tree is saved to disk and reloaded on the next run.
 
+<p align="center">
+  <img src="docs/img/demo.gif" alt="Animated terminal recording of a full round: the game guesses Dog and loses, learns Elephant and the question &quot;Does it have a trunk?&quot;, then immediately uses that question to win the next round." width="720">
+</p>
+
+<details>
+<summary>Text transcript (same session as the GIF above)</summary>
+
 ```
-Is it a Dog? (yes/no): n
+Is it a Dog? (yes/no): no
 I give up!  What animal were you thinking of?
-Animal name: Cat
+Animal name: Elephant
 Give me a yes/no question that tells the new animal from my guess:
-Question: Does it meow?
-For the new animal, is the answer to your question YES? (yes/no): y
-Would you like to play again? (yes/no): n
+Question: Does it have a trunk
+For the new animal, is the answer to your question YES? (yes/no): yes
+Would you like to play again? (yes/no): yes
+Does it have a trunk? (yes/no): yes
+Is it a Elephant? (yes/no): yes
+I win!
+Would you like to play again? (yes/no): no
 ```
+
+</details>
 
 This is a companion port of the [Forth implementation](../AnimalGame) of the
 same game — same design, re-expressed to play to Prolog's strengths (see
@@ -88,6 +101,10 @@ make test-ui
 make test-tree
 make test-persist
 ```
+
+<p align="center">
+  <img src="docs/img/demo.png" alt="Screenshot of make run: GNU Prolog boots, guesses Dog, loses, and the player starts teaching it Elephant." width="720">
+</p>
 
 ## How it works
 
